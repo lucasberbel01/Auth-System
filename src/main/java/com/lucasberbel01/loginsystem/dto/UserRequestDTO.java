@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 
 public record UserRequestDTO(
         @NotBlank(message = "O nome de usuário não pode estar em branco")
-        @Size(min = 3, max = 100, message = "O nome de usuário deve ter entre 3 e 50 caracteres")
+        @Size(min = 3, max = 100, message = "O nome de usuário deve ter entre 3 e 100 caracteres")
         String username,
 
         @NotBlank(message = "A senha não pode estar em branco")
