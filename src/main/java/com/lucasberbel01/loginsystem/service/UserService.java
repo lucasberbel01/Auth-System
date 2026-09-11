@@ -1,10 +1,16 @@
 package com.lucasberbel01.loginsystem.service;
 
+import com.lucasberbel01.loginsystem.dto.UserRequestDTO;
 import com.lucasberbel01.loginsystem.dto.UserResponseDTO;
 import com.lucasberbel01.loginsystem.exception.UserNotFoundException;
+import com.lucasberbel01.loginsystem.model.User;
 import com.lucasberbel01.loginsystem.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 
@@ -13,25 +19,22 @@ public class UserService {
 
 
     private final UserRepository repo;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repo) {
+
+
+    public UserService(UserRepository repo, PasswordEncoder passwordEncoder) {
         this.repo = repo;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
     //FINDBY
     @Transactional(readOnly = true)
-    public List<UserResponseDTO> getAll() {
+    public Page<UserResponseDTO> getAll(Pageable pageable) {
 
-        List<UserResponseDTO> users = repo.findAll().stream().
-                map(UserResponseDTO::fromEntity)
-                .toList();
+        return repo.findAll(pageable).map(UserResponseDTO::fromEntity);
 
-        if (users.isEmpty()) {
-            throw new UserNotFoundException("Users not found");
-        }
-
-        return users;
     }
 
     @Transactional(readOnly = true)
@@ -56,6 +59,24 @@ public class UserService {
         return repo.findUserByEmail(email)
                 .map(UserResponseDTO::fromEntity)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+    }
+    //---------------------------------------------------------------------------------------------------------------------
+    //SAVE
+    @Transactional
+    public UserResponseDTO createUser(UserRequestDTO request){
+
+        User user = new User();
+
+        user.setUsername(request.username());
+        user.setEmail(request.email());
+        user.setPassword(passwordEncoder.encode(request.password()));
+        user.setRole(request.role());
+
+        User savedUser = repo.save(user);
+
+        return UserResponseDTO.fromEntity(savedUser);
+
 
     }
 
