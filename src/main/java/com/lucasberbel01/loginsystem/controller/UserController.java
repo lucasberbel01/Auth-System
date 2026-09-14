@@ -89,5 +89,11 @@ public class UserController {
     //DELETE
     // ================================================================================
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
