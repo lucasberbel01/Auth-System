@@ -1,5 +1,6 @@
 package com.lucasberbel01.loginsystem.controller;
 
+import com.lucasberbel01.loginsystem.dto.UserLoginDTO;
 import com.lucasberbel01.loginsystem.dto.UserPatchDTO;
 import com.lucasberbel01.loginsystem.dto.UserRequestDTO;
 import com.lucasberbel01.loginsystem.dto.UserResponseDTO;
@@ -95,5 +96,12 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    //================================================================================
+    //LOGIN
+    // ================================================================================
+    @PostMapping("/auth/login")
+    public ResponseEntity<UserResponseDTO> login(@Valid @RequestBody UserLoginDTO request) {
+        return ResponseEntity.ok(service.login(request));
+    }
 
 }
