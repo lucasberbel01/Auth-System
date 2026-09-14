@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/user")
@@ -64,7 +67,13 @@ public class UserController {
 
         UserResponseDTO userResponseDTO = service.createUser(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(userResponseDTO.id())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(userResponseDTO);
     }
 
     //================================================================================
@@ -96,6 +105,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        service.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
