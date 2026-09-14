@@ -15,8 +15,5 @@ public record UserRequestDTO(
 
         @NotBlank(message = "O e-mail não pode estar em branco")
         @Email(message = "O e-mail informado é inválido")
-        String email,
-
-        @NotNull(message = "A role é obrigatória")
-        UserRole role
+        String email
 ) {}

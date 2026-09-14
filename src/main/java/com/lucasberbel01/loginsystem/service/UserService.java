@@ -1,10 +1,12 @@
 package com.lucasberbel01.loginsystem.service;
 
+import com.lucasberbel01.loginsystem.dto.UserLoginDTO;
 import com.lucasberbel01.loginsystem.dto.UserPatchDTO;
 import com.lucasberbel01.loginsystem.dto.UserRequestDTO;
 import com.lucasberbel01.loginsystem.dto.UserResponseDTO;
 import com.lucasberbel01.loginsystem.enums.UserRole;
 import com.lucasberbel01.loginsystem.exception.EmailAlreadyTakenException;
+import com.lucasberbel01.loginsystem.exception.EmailOrPasswordIncorrectException;
 import com.lucasberbel01.loginsystem.exception.UserNotFoundException;
 import com.lucasberbel01.loginsystem.exception.UsernameAlreadyTakenException;
 import com.lucasberbel01.loginsystem.model.User;
@@ -14,9 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
-import java.util.List;
 
 @Service
 public class UserService {
@@ -72,8 +71,7 @@ public class UserService {
         user.setUsername(request.username());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setRole(request.role());
-
+        user.setRole(UserRole.ROLE_USER);
         User savedUser = repo.save(user);
 
         return UserResponseDTO.fromEntity(savedUser);
@@ -156,6 +154,21 @@ public class UserService {
 
         repo.deleteById(id);
     }
+
+    //================================================================================
+    //LOGIN
+    // ================================================================================
+    @Transactional(readOnly = true)
+    public UserResponseDTO login(UserLoginDTO request){
+        User user = repo.findUserByEmail(request.email()).orElseThrow(() -> new EmailOrPasswordIncorrectException("Wrong email or password"));
+
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
+            throw new EmailOrPasswordIncorrectException("Wrong email or password");
+        }
+
+        return UserResponseDTO.fromEntity(user);
+    }
+
 
     //---------------------------------------------------------------------------------------------------------------------
     //VALIDATIONS
