@@ -1,7 +1,9 @@
 package com.lucasberbel01.loginsystem.controller;
 
+import com.lucasberbel01.loginsystem.dto.UserPatchDTO;
 import com.lucasberbel01.loginsystem.dto.UserRequestDTO;
 import com.lucasberbel01.loginsystem.dto.UserResponseDTO;
+import com.lucasberbel01.loginsystem.enums.UserRole;
 import com.lucasberbel01.loginsystem.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -54,8 +56,9 @@ public class UserController {
     // ================================================================================
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
-        UserResponseDTO userResponseDTO = service.createUser(userRequestDTO);
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO request) {
+
+        UserResponseDTO userResponseDTO = service.createUser(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
     }
@@ -63,5 +66,28 @@ public class UserController {
     //================================================================================
     //PUT E PATCH
     // ================================================================================
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDTO request) {
+        return ResponseEntity.ok(service.updateUser(id, request));
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    public ResponseEntity<UserResponseDTO> patchUser(@PathVariable Long id, @Valid @RequestBody UserPatchDTO request) {
+        return ResponseEntity.ok(service.patchUser(id, request));
+    }
+
+    @PatchMapping("/role/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponseDTO> patchUserRole(@PathVariable Long id, @Valid @RequestBody UserRole request) {
+        return ResponseEntity.ok(service.updateUserRole(id, request));
+    }
+
+    //================================================================================
+    //DELETE
+    // ================================================================================
+
 
 }

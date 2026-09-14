@@ -69,8 +69,7 @@ public class UserService {
         user.setUsername(request.username());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setRole(request.role());
-
+        user.setRole(UserRole.ROLE_USER);
         User savedUser = repo.save(user);
 
         return UserResponseDTO.fromEntity(savedUser);
