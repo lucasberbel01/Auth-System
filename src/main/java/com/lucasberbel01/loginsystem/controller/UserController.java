@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 public class UserController {
 
+    //TODO GlobalExceptionHandler
+    // autenticacao JWT
+
     private final UserService service;
 
     public UserController(UserService userService) {
