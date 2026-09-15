@@ -23,7 +23,7 @@ public class UserController {
 
     //TODO GlobalExceptionHandler
     // autenticacao JWT
-    // validar se todos os endpoints funcionam antes do JWT
+
 
     private final UserService service;
 

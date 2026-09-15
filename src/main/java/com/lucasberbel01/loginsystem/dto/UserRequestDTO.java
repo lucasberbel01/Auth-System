@@ -4,16 +4,16 @@ import com.lucasberbel01.loginsystem.enums.UserRole;
 import jakarta.validation.constraints.*;
 
 public record UserRequestDTO(
-        @NotBlank(message = "O nome de usuário não pode estar em branco")
-        @Size(min = 3, max = 100, message = "O nome de usuário deve ter entre 3 e 100 caracteres")
+        @NotBlank(message = "The username can not be blank")
+        @Size(min = 3, max = 100, message = "Usernames must have between 3 and 100 characters")
         String username,
 
-        @NotBlank(message = "A senha não pode estar em branco")
-        @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
-        @Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$", message = "A senha deve conter pelo menos 1 numero, 1 letra maiuscula e 1 caracter especial")
+        @NotBlank(message = "The password can not be blank")
+        @Size(min = 6, message = "Passwords must have at least 6 characters")
+        @Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$", message = "Passwords must contain a number, a capital letter and a special character")
         String password,
 
-        @NotBlank(message = "O e-mail não pode estar em branco")
-        @Email(message = "O e-mail informado é inválido")
+        @NotBlank(message = "The email can not be blank")
+        @Email(message = "The informed email is invalid")
         String email
 ) {}
