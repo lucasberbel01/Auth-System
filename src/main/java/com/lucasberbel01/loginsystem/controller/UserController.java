@@ -23,6 +23,7 @@ public class UserController {
 
     //TODO GlobalExceptionHandler
     // autenticacao JWT
+    // validar se todos os endpoints funcionam antes do JWT
 
     private final UserService service;
 
@@ -35,25 +36,21 @@ public class UserController {
     // ================================================================================
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<UserResponseDTO>> getAllUsers(Pageable pageable) {
         return ResponseEntity.ok(service.getAllUsers(pageable));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<UserResponseDTO> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(service.getUserById(id));
     }
 
     @GetMapping("/username/{username}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponseDTO> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.ok(service.getUserByUsername(username));
     }
 
     @GetMapping("/email/{email}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponseDTO> getUserByEmail(@PathVariable String email) {
         return ResponseEntity.ok(service.getUserByEmail(email));
     }
@@ -81,19 +78,16 @@ public class UserController {
     // ================================================================================
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDTO request) {
         return ResponseEntity.ok(service.updateUser(id, request));
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<UserResponseDTO> patchUser(@PathVariable Long id, @Valid @RequestBody UserPatchDTO request) {
         return ResponseEntity.ok(service.patchUser(id, request));
     }
 
     @PatchMapping("/role/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> patchUserRole(@PathVariable Long id, @Valid @RequestBody UserRole request) {
         return ResponseEntity.ok(service.updateUserRole(id, request));
     }
@@ -103,7 +97,6 @@ public class UserController {
     // ================================================================================
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         service.deleteUser(id);
         return ResponseEntity.noContent().build();
