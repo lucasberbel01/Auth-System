@@ -21,8 +21,9 @@ import java.net.URI;
 @RequestMapping("/api/user")
 public class UserController {
 
-    //TODO GlobalExceptionHandler
-    // autenticacao JWT
+    // TODO GlobalExceptionHandler
+    // autenticacao JWT e permissoes
+    // criar controller separado para autenticacao
 
 
     private final UserService service;
