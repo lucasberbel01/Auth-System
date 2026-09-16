@@ -3,7 +3,7 @@ package com.lucasberbel01.loginsystem.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public record UserLoginDTO(
+public record LoginRequestDTO(
         @NotBlank(message = "The email can not be empty")
         @Email(message = "invalid email")
         String email,

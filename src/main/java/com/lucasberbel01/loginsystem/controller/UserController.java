@@ -5,22 +5,23 @@ import com.lucasberbel01.loginsystem.dto.UserRequestDTO;
 import com.lucasberbel01.loginsystem.dto.UserResponseDTO;
 import com.lucasberbel01.loginsystem.enums.UserRole;
 import com.lucasberbel01.loginsystem.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
+@SecurityRequirement (name = "bearerAuth")
 public class UserController {
 
     // TODO GlobalExceptionHandler
-    // autenticacao JWT e permissoes
-    // criar controller separado para autenticacao
-
+    // rate Limiter
 
     private final UserService service;
 
@@ -33,6 +34,7 @@ public class UserController {
     // ================================================================================
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<UserResponseDTO>> getAllUsers(@ParameterObject
                                                                  @PageableDefault(size = 10, sort = "username") Pageable pageable) {
         return ResponseEntity.ok(service.getAllUsers(pageable));
@@ -58,16 +60,21 @@ public class UserController {
     // ================================================================================
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.user.id")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDTO request) {
         return ResponseEntity.ok(service.updateUser(id, request));
     }
 
+
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.user.id")
     public ResponseEntity<UserResponseDTO> patchUser(@PathVariable Long id, @Valid @RequestBody UserPatchDTO request) {
         return ResponseEntity.ok(service.patchUser(id, request));
     }
 
+
     @PatchMapping("/role/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.user.id")
     public ResponseEntity<UserResponseDTO> patchUserRole(@PathVariable Long id, @Valid @RequestBody UserRole request) {
         return ResponseEntity.ok(service.updateUserRole(id, request));
     }
@@ -76,7 +83,9 @@ public class UserController {
     //DELETE
     // ================================================================================
 
+
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.user.id")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         service.deleteUser(id);
         return ResponseEntity.noContent().build();
