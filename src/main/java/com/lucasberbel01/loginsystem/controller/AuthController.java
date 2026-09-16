@@ -35,7 +35,7 @@ public class AuthController {
     //POST
     // ================================================================================
 
-    @PostMapping("/create")
+    @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO request) {
 
         UserResponseDTO userResponseDTO = service.createUser(request);
