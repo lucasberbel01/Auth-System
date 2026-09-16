@@ -1,6 +1,6 @@
 package com.lucasberbel01.loginsystem.service;
 
-import com.lucasberbel01.loginsystem.dto.UserLoginDTO;
+import com.lucasberbel01.loginsystem.dto.LoginRequestDTO;
 import com.lucasberbel01.loginsystem.dto.UserPatchDTO;
 import com.lucasberbel01.loginsystem.dto.UserRequestDTO;
 import com.lucasberbel01.loginsystem.dto.UserResponseDTO;
@@ -159,7 +159,7 @@ public class UserService {
     //LOGIN
     // ================================================================================
     @Transactional(readOnly = true)
-    public UserResponseDTO login(UserLoginDTO request){
+    public UserResponseDTO login(LoginRequestDTO request){
         User user = repo.findUserByEmail(request.email()).orElseThrow(() -> new EmailOrPasswordIncorrectException("Wrong email or password"));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
