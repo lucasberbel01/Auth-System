@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface PasswordResetCodeRepository extends JpaRepository<PasswordResetCode, Long> {
     Optional<PasswordResetCode> findTopByUserEmailOrderByIdDesc(String userEmail);
     List<PasswordResetCode> findAllByUserEmail(String userEmail);
+    void deleteAllByUserEmail(String userEmail);
 }

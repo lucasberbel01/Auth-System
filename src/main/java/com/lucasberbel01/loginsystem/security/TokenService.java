@@ -5,18 +5,23 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.lucasberbel01.loginsystem.exception.InvalidResetCodeException;
 import com.lucasberbel01.loginsystem.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Date;
 
 @Service
 public class TokenService {
 
     @Value("${api.security.token.secret}")
     private String secret;
+
+    @Value("${SIGNKEY}")
+    private String signKey;
 
     private static final String ISSUER = "loginsystem-api";
 
@@ -53,5 +58,41 @@ public class TokenService {
         return Instant.now().plusSeconds(3600 * 2) // 2 horas
                 .atZone(ZoneOffset.UTC)
                 .toInstant();
+    }
+
+
+    //=========================================================================
+    // RESET PASSWORD
+    //=========================================================================
+
+    public String generateResetToken(String email){
+        Algorithm algorithm = Algorithm.HMAC256(signKey);
+
+        return JWT.create()
+                .withSubject(email)
+                .withClaim("purpose", "password_reset")
+                .withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) // 10 min
+                .sign(algorithm);
+    }
+
+    public String validateAndExtractEmailFromToken(String token) {
+        Algorithm algorithm = Algorithm.HMAC256(signKey);
+
+        try{
+            DecodedJWT decoded = JWT.require(algorithm)
+                    .build()
+                    .verify(token);
+
+            String purpose = decoded.getClaim("purpose").asString();
+            if (!"password_reset".equals(purpose)) {
+                throw new InvalidResetCodeException("Invalid token");
+            }
+
+            return decoded.getSubject();
+
+        }catch (JWTVerificationException exception){
+            throw new InvalidResetCodeException("Invalid token or expired");
+        }
     }
 }

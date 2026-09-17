@@ -8,7 +8,6 @@ import com.lucasberbel01.loginsystem.repository.PasswordResetCodeRepository;
 import com.lucasberbel01.loginsystem.repository.UserRepository;
 import com.lucasberbel01.loginsystem.security.CodeUtils;
 import com.lucasberbel01.loginsystem.security.TokenService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class PasswordResetService {
 
     private final UserRepository userRepo;
@@ -28,6 +26,15 @@ public class PasswordResetService {
     private final JavaMailSender mailSender;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+
+    public PasswordResetService(UserRepository userRepo, PasswordResetCodeRepository codeRepo, CodeUtils codeUtils, JavaMailSender mailSender, TokenService tokenService, PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.codeRepo = codeRepo;
+        this.codeUtils = codeUtils;
+        this.mailSender = mailSender;
+        this.tokenService = tokenService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     private static final int CODE_EXPIRATION_MINUTES = 5;
     private static final int MAX_ATTEMPTS = 5;
@@ -70,9 +77,9 @@ public class PasswordResetService {
             throw new InvalidResetCodeException("Invalid code or expired");
         }
 
-        codeRepo.delete(resetCode);
+        codeRepo.deleteAllByUserEmail(email);
 
-        return TokenService.generateResetToken(email);
+        return tokenService.generateResetToken(email);
     }
 
     @Transactional
