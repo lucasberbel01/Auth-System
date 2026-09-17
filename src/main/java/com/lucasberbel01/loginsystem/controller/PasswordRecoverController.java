@@ -26,13 +26,13 @@ public class PasswordRecoverController {
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword (@RequestBody @Valid ForgotPasswordRequest request){
         passwordResetService.forgotPassword(request.email());
-        return ResponseEntity.ok(Map.of("message", "If the email exists, we sent reset code to it"));
+        return ResponseEntity.ok(Map.of("message", "If the email exists, we will send a reset code to it"));
     }
 
     @PostMapping("/verify-reset-code")
     public ResponseEntity<?> verifyCode (@RequestBody @Valid VerifyCodeRequest request ){
         String resetToken = passwordResetService.verifyCode(request.email(),  request.code());
-        return ResponseEntity.ok(Map.of("Reset token", resetToken));
+        return ResponseEntity.ok(Map.of("resetToken", resetToken));
     }
 
     @PostMapping("/reset-password")
