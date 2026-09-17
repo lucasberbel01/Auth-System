@@ -32,14 +32,4 @@ public class PasswordResetCode {
     @Column(nullable = false)
     private int attempts = 0;
 
-    @Override
-    public String toString() {
-        return "PasswordResetCode{" +
-                "id=" + id +
-                ", email='" + userEmail + '\'' +
-                ", code='" + code + '\'' +
-                ", dateTime=" + expiryDate +
-                ", attempts=" + attempts +
-                '}';
-    }
 }
