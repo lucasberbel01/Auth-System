@@ -1,6 +1,5 @@
 package com.lucasberbel01.loginsystem.dto;
 
-import com.lucasberbel01.loginsystem.enums.UserRole;
 import jakarta.validation.constraints.*;
 
 public record UserRequestDTO(
@@ -9,7 +8,7 @@ public record UserRequestDTO(
         String username,
 
         @NotBlank(message = "The password can not be blank")
-        @Size(min = 6, message = "Passwords must have at least 6 characters")
+        @Size(min = 6, message = "Passowors must have at least 6 characters")
         @Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$", message = "Passwords must contain a number, a capital letter and a special character")
         String password,
 
