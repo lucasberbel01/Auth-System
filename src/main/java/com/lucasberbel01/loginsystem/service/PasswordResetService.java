@@ -45,7 +45,7 @@ public class PasswordResetService {
 
         if (user.isEmpty()) return;
 
-        codeRepo.deleteAll();
+        codeRepo.deleteAllByUserEmail(email);
 
         String rawCode = codeUtils.generateCode();
 
@@ -68,7 +68,7 @@ public class PasswordResetService {
         }
 
         if (resetCode.getAttempts() >= MAX_ATTEMPTS) {
-            throw new InvalidResetCodeException("Max attempts exceeded");
+            throw new InvalidResetCodeException("Max attempts exceeded, request a new code");
         }
 
         if (!resetCode.getCode().equals(codeUtils.hash(rawCode))) {
