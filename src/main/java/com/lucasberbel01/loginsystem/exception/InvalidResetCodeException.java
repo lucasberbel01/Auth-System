@@ -1,7 +1,9 @@
 package com.lucasberbel01.loginsystem.exception;
 
-public class InvalidResetCodeException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class InvalidResetCodeException extends BusinessException {
     public InvalidResetCodeException(String message) {
-        super(message);
+        super(message, HttpStatus.BAD_REQUEST);
     }
 }
