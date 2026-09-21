@@ -96,7 +96,7 @@ public class PasswordResetService {
     private void sendEmail(String emailTo, String code){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(emailTo);
-        message.setSubject("Reset Password Code");
+        message.setSubject("Reset code");
         message.setText("Your reset password code is: " + code +
                 "\nIt expires in " + CODE_EXPIRATION_MINUTES + " minutes.");
         mailSender.send(message);

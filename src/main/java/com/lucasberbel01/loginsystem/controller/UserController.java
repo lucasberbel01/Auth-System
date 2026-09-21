@@ -7,6 +7,7 @@ import com.lucasberbel01.loginsystem.enums.UserRole;
 import com.lucasberbel01.loginsystem.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.hibernate.annotations.Filter;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
