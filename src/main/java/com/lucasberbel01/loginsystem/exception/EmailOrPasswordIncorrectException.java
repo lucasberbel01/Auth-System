@@ -1,7 +1,9 @@
 package com.lucasberbel01.loginsystem.exception;
 
-public class EmailOrPasswordIncorrectException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class EmailOrPasswordIncorrectException extends BusinessException {
     public EmailOrPasswordIncorrectException(String message) {
-        super(message);
+        super(message, HttpStatus.UNAUTHORIZED );
     }
 }
