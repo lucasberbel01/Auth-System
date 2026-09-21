@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 
 public record VerifyCodeRequest(
         @Email(message = "The informed email is invalid")
-        @NotBlank
+        @NotBlank(message = "You must inform an email")
         String email,
 
         @NotBlank(message = "You must inform the code sent in your email")

@@ -12,7 +12,7 @@ public record UserRequestDTO(
         @Pattern(regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$", message = "Passwords must contain a number, a capital letter and a special character")
         String password,
 
-        @NotBlank(message = "The email can not be blank")
+        @NotBlank(message = "You must inform an email")
         @Email(message = "The informed email is invalid")
         String email
 ) {}

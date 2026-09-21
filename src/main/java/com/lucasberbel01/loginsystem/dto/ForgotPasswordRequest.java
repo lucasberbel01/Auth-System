@@ -5,6 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public record ForgotPasswordRequest(
         @Email(message = "The informed email is invalid")
-        @NotBlank(message = "You must inform a email")
+        @NotBlank(message = "You must inform an email")
         String email
 ) {}
