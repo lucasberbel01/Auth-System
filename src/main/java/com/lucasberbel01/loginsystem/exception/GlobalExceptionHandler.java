@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
         ErrorResponse body = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "An error occurred, try again later",
+                "An error has occurred, try again later",
                 request.getRequestURI()
         );
         return ResponseEntity.internalServerError().body(body);
