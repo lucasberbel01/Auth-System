@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         ErrorResponse body = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                "Validations erros in the sent fields",
+                "Validations errors in the sent fields",
                 request.getRequestURI(),
                 details
         );
