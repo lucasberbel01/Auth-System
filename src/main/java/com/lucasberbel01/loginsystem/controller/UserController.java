@@ -72,7 +72,7 @@ public class UserController {
 
 
     @PatchMapping("/role/{id}")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.user.id")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> patchUserRole(@PathVariable Long id, @Valid @RequestBody UserRole request) {
         return ResponseEntity.ok(service.updateUserRole(id, request));
     }
