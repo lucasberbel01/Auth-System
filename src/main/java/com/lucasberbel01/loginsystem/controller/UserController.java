@@ -21,10 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @SecurityRequirement (name = "bearerAuth")
 public class UserController {
 
-    // TODO GlobalExceptionHandler
-    // rate Limiter
-    // refresh token
-
     private final UserService service;
 
     public UserController(UserService userService) {
